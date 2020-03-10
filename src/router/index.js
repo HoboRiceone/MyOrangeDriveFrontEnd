@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../components/Login.vue'
 import MainFrame from '../components/MainFrame.vue'
+import Filemanagement from '../components/subpage/Filemanagement.vue'
+import Settings from '../components/subpage/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -20,7 +22,19 @@ const routes = [
   {
     path: '/MainFrame',
     name: 'MainFrame',
-    component: MainFrame
+    component: MainFrame,
+    children:[
+      {
+        path: '/Filemanagement',
+        name: 'Filemanagement',
+        component: Filemanagement
+      },
+      {
+        path: '/Settings',
+        name: 'Settings',
+        component: Settings
+      }
+    ]
   },
   {
     path: '/about',

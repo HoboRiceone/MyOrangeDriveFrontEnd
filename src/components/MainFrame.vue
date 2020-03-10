@@ -2,20 +2,27 @@
   <div class="mainframe">
     <el-container style="height:100%">
       <el-header class="mainheader">
-        <img src="../assets/MainIcon.png" style="height:100%;float:left;"/>
+        <div style="height:10%;"></div>
+        <img src="../assets/MainIcon.png" style="height:80%;float:left;"/>
       </el-header>
-      <el-main style="background-color:#DCDFE6;margin: 0px;padding: 0px;">
-          <el-menu default-active="1" class="navmenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-            <el-menu-item index="1">
-               <i class="el-icon-menu"></i>
-              File Management
-            </el-menu-item>
-            <el-menu-item index="2">
-              <i class="el-icon-setting"></i>
-              Settings
-            </el-menu-item>
-          </el-menu>
-      </el-main>
+      <el-container>
+        <el-aside style="background-color:#DCDFE6;margin: 0px;padding: 0px;">
+            <el-menu default-active="$route.path" class="navmenu" router background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+              <div style="height:2%"></div>
+              <el-menu-item index="/Filemanagement" style="font-size:35%;">
+                <i class="el-icon-menu" style="font-size:100%"></i>
+                File Management
+              </el-menu-item>
+              <el-menu-item index="/Settings" style="font-size:35%;">
+                <i class="el-icon-setting" style="font-size:100%"></i>
+                Settings
+              </el-menu-item>
+            </el-menu>
+        </el-aside>
+        <el-main style="background-color:#DCDFE6;margin: 0px;padding: 0px;">
+          <router-view class="subview"/>
+        </el-main>
+        </el-container>
     </el-container>
   </div>
 </template>
@@ -43,11 +50,21 @@ export default {
   height:20%;
   color:white;
   font-size:4em;
-  box-shadow: 10 10px 5px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+
 }
+
 .navmenu{
-  width:15%;
+  font-size: 60px;
+  text-align: left;
+  width:100%;
   height:100%;
-  box-shadow: 10px 10px 5px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  /* box-shadow: 10px 10px 5px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04); */
+  float:left;
+}
+
+.subview{
+  margin: 0px;
+  padding: 0px;
+  width:100%;
 }
 </style>
