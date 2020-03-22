@@ -8,15 +8,15 @@
       <h5 style="text-align: left;height:2%; position:relative; left:1%;">File Name:</h5>
       <el-menu class="fileview">
         <div style="height:2%"></div>
-        <el-menu-item  class="fileitem">
+        <el-menu-item  class="folderitem">
           <i class="el-icon-folder" style="font-size:100%"></i>
           .mvm/wrapper
         </el-menu-item>
-        <el-menu-item  class="fileitem">
+        <el-menu-item  class="folderitem">
           <i class="el-icon-folder" style="font-size:100%"></i>
           log
         </el-menu-item>
-        <el-menu-item  class="fileitem">
+        <el-menu-item  class="folderitem">
           <i class="el-icon-folder" style="font-size:100%"></i>
           src
         </el-menu-item>
@@ -73,7 +73,13 @@ export default {
 }
 .fileitem
 {
-  font-size:35%;
+  font-size:1em;
+  border-top:1px solid #F2F6FD;
+  border-bottom:1px solid #F2F6FD;
+}
+.folderitem
+{
+  font-size:1em;
   border-top:1px solid #F2F6FD;
   border-bottom:1px solid #F2F6FD;
 }

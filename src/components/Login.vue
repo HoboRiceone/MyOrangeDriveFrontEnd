@@ -4,16 +4,16 @@
       <el-header style="height:10%;">
       </el-header>
       <el-main style="height:20%; overflow-x:hidden;">
-        <img src="../assets/DriveIcon.png" style="height:50px;"/>
+        <img src="../assets/DriveIcon.png" style="height:90%;"/>
       </el-main>
       <el-main>
-        <el-input v-model="username" placeholder="Username"></el-input>
+        <el-input v-model="username" placeholder="Username" style="position:relative;top:35%;"></el-input>
       </el-main>
       <el-main>
         <el-input v-model="password" placeholder="Password"></el-input>
       </el-main>
       <el-main>
-        <el-button type="primary" style="float:right" @click="UserLogin">Next</el-button>
+        <el-button type="primary" style="float:right;width:25%;font-size:1.3em;" @click="UserLogin">Next</el-button>
       </el-main>
     </el-container>
   </div>
@@ -30,10 +30,25 @@ export default {
   },
   methods:{
     UserLogin () {
-      if(this.username == "cse687" && this.password == "687687")
+      this.$api.post('/api/login', 
+      {
+        username: this.username,                        //'johnwick123@gmail.com',
+        password: this.password                       //'1231234'
+      }, response => {
+      if (response.status == 200) 
       {
         this.$router.push({name:"MainFrame"})
+      } 
+      else if(response.status == 400)
+      {
+        alert(response.data.msg);
+        
       }
+      else
+      {
+        alert("Network Error");
+      }
+      });
     }
   }
 }

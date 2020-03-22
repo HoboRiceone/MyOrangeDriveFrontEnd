@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import '../theme/index.css'
 import ElementUI from 'element-ui'
+import Api from './api/index.js';
+
+Vue.prototype.$api = Api;
 
 Vue.use(ElementUI)
 
