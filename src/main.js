@@ -5,10 +5,14 @@ import store from './store'
 import '../theme/index.css'
 import ElementUI from 'element-ui'
 import Api from './api/index.js';
+import VueBus from 'vue-bus'
+import Common from './Common'
+Vue.prototype.Common = Common;
 
 Vue.prototype.$api = Api;
 
-Vue.use(ElementUI)
+Vue.use(ElementUI);
+Vue.use(VueBus);
 
 Vue.config.productionTip = false
 

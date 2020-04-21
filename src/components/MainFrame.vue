@@ -29,7 +29,18 @@
 
 <script>
 export default {
-  name: 'MainFrame'
+  name: 'MainFrame',
+  data ()
+  {
+    return{
+    };
+  },
+  created: function () 
+  {
+  },
+  methods:
+  {
+  }
 }
 </script>
 
@@ -39,12 +50,8 @@ export default {
   background-color:white;
   height:100%;
   width:100%;
-  position:fixed;
-  top:0px;
-  left:0px;
-  right:0px;
-  bottom:0px;
 }
+
 .mainheader{
   background-color:#D84300;
   height:20%;
@@ -60,11 +67,13 @@ export default {
   height:100%;
   /* box-shadow: 10px 10px 5px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04); */
   float:left;
+  
 }
 
 .subview{
   margin: 0px;
   padding: 0px;
   width:100%;
+  border:0px;
 }
 </style>

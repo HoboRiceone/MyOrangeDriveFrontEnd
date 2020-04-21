@@ -13,7 +13,11 @@
         <el-input v-model="password" placeholder="Password"></el-input>
       </el-main>
       <el-main>
-        <el-button type="primary" style="float:right;width:25%;font-size:1.3em;" @click="UserLogin">Next</el-button>
+        <el-radio-group v-model="logtype" style="float:left">
+          <el-radio-button label="User"></el-radio-button>
+          <el-radio-button label="Admin"></el-radio-button>
+        </el-radio-group>
+        <el-button type="primary" style="float:right;width:25%;font-size:1.3em;" @click="Login">Next</el-button>
       </el-main>
     </el-container>
   </div>
@@ -24,31 +28,60 @@ export default {
   name: 'Login',
   data () {
     return{
-    username:'',
-    password:''
+    username:'johnwick123@gmail.com',
+    password:'123123',
+    logtype: 'User'
     }
   },
   methods:{
-    UserLogin () {
-      this.$api.post('/api/login', 
+    Login () 
+    {
+      if (this.logtype=='User')
       {
-        username: this.username,                        //'johnwick123@gmail.com',
-        password: this.password                       //'1231234'
-      }, response => {
-      if (response.status == 200) 
-      {
-        this.$router.push({name:"MainFrame"})
-      } 
-      else if(response.status == 400)
-      {
-        alert(response.data.msg);
-        
+        this.$api.post('/api/login', {},
+        {
+          username: this.username,                        //'johnwick123@gmail.com',
+          password: this.password                       //'1231234'
+        }, response => {
+        if (response.status == 200) 
+        {
+          this.$router.push({name:"MainFrame"})
+        } 
+        else if(response.status == 400)
+        {
+          alert(response.data.msg);
+          
+        }
+        else
+        {
+          alert("Network Error");
+        }
+        });
       }
-      else
+      else if (this.logtype=='Admin')
       {
-        alert("Network Error");
+        this.$api.post('/admin/login', {},
+        {
+          username: this.username,                        //'johnwick123@gmail.com',
+          password: this.password                       //'1231234'
+        }, response => {
+        if (response.status == 200) 
+        {
+          this.Common.xtoken=response.headers['x-auth-token'];
+          console.log(this.Common.xtoken);
+          this.$router.push({name:"AdminMainFrame"});
+        } 
+        else if(response.status == 400)
+        {
+          alert(response.data.msg);
+          
+        }
+        else
+        {
+          alert("Network Error");
+        }
+        });
       }
-      });
     }
   }
 }
@@ -68,5 +101,9 @@ export default {
   transform:translate(-50%,-50%);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  }
+  .el-switch__core
+  {
+    height:60px;
   }
 </style>
