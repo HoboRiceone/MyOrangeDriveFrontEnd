@@ -10,7 +10,7 @@
         <el-input v-model="username" placeholder="Username" style="position:relative;top:35%;"></el-input>
       </el-main>
       <el-main>
-        <el-input v-model="password" placeholder="Password"></el-input>
+        <el-input v-model="password" placeholder="Password" show-password></el-input>
       </el-main>
       <el-main>
         <el-radio-group v-model="logtype" style="float:left">

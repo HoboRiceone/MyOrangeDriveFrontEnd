@@ -2,7 +2,7 @@
   <div class="localchange">
     <div style="height:5%;"></div>
     <div class="inputblock">
-      444Name: 
+      Name: 
       <el-input v-model="nameinput" class="inputbox"></el-input>
     </div>
     <div style="height:5%;"></div>
