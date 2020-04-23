@@ -7,8 +7,9 @@
       @current-change="handleCurrentChange"
       style="width: 100%;">
       <el-table-column
-        type="index"
-        min-width="9%">
+        property="id"
+        label="ID"
+        min-width="5%">
       </el-table-column>
       <el-table-column
         property="email"
@@ -67,35 +68,7 @@ export default {
   },
   mounted: function () 
   {
-    this.$api.get('/admin/users', 
-    {
-      'x-auth-token': this.Common.xtoken
-    }, 
-    {
-    }, response => {
-    if (response.status == 200) 
-    {
-      var userslist;
-
-      userslist = response.data.result_data.users;
-      for (var key in userslist)
-      {
-        this.tableData.push({email: userslist[key].email,totalstorage: userslist[key].total_storage,usedstorage: userslist[key].used_storage,
-                            blockedstatus: userslist[key].blocked_status.toString(),uploadaccess: userslist[key].upload_access.toString(),
-                            downloadaccess: userslist[key].download_access.toString(),sourcetype: userslist[key].source_type});
-      }
-      
-    } 
-    else if(response.status == 400)
-    {
-      alert(response.data.msg);
-      
-    }
-    else
-    {
-      alert("Network Error");
-    }
-    });
+    this.getlist();
   },
     methods:{
     handleCurrentChange(val) {
@@ -121,7 +94,30 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          this.$message({type: 'success',message: 'Success!'});
+          this.$api.delete('/admin/users/'+this.currentRow.id, 
+          {
+            'x-auth-token': this.Common.xtoken
+          }, 
+          {
+          }, response => {
+          if (response.status == 200) 
+          {
+            this.$message({type: 'success',message: 'Success!'});
+            console.log(response);  
+            this.tableData= [];
+            this.getlist();
+          } 
+          else if(response.status == 400)
+          {
+            alert(response.data.msg);
+            
+          }
+          else
+          {
+            alert("Network Error");
+            console.log(response);
+          }
+          });
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -129,6 +125,38 @@ export default {
           });          
         });
       }
+    },
+    getlist()
+    {
+      this.$api.get('/admin/users', 
+      {
+        'x-auth-token': this.Common.xtoken
+      }, 
+      {
+      }, response => {
+      if (response.status == 200) 
+      {
+        var userslist;
+
+        userslist = response.data.result_data.users;
+        for (var key in userslist)
+        {
+          this.tableData.push({id: userslist[key].id,email: userslist[key].email,totalstorage: userslist[key].total_storage,usedstorage: userslist[key].used_storage,
+                              blockedstatus: userslist[key].blocked_status.toString(),uploadaccess: userslist[key].upload_access.toString(),
+                              downloadaccess: userslist[key].download_access.toString(),sourcetype: userslist[key].source_type});
+        }
+        
+      } 
+      else if(response.status == 400)
+      {
+        alert(response.data.msg);
+        
+      }
+      else
+      {
+        alert("Network Error");
+      }
+      });
     }
   }
 }

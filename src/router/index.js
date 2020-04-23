@@ -14,7 +14,7 @@ import Storageconfigure from '../components/Adminsubpage/Storageconfigure.vue'
 import AWSadd from '../components/Adminsubpage/Configsubpage/AWSadd.vue'
 import AWSchange from '../components/Adminsubpage/Configsubpage/AWSchange.vue'
 import Azurechange from '../components/Adminsubpage/Configsubpage/Azurechange.vue'
-
+import Localchange from '../components/Adminsubpage/Configsubpage/Localchange.vue'
 
 Vue.use(VueRouter)
 
@@ -90,6 +90,11 @@ const routes = [
         path: '/Azurechange',
         name: 'Azurechange',
         component: Azurechange
+      },
+      {
+        path: '/Localchange',
+        name: 'Localchange',
+        component: Localchange
       },
     ]
   },

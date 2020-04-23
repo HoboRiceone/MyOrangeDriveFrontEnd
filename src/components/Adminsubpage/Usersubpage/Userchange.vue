@@ -31,7 +31,7 @@
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      <el-button type="primary">Save</el-button>
+      <el-button type="primary" @click="save">Save</el-button>
     </div>
   </div>
 </template>
@@ -42,10 +42,11 @@ export default {
   data ()
   {
     return{
-      totalstorageinput: '',
-      blockedstatusinput: '',
-      uploadacessinput: '',
-      downloadacessinput: '',
+      userid: 0,
+      totalstorageinput: "",
+      blockedstatusinput: "false",
+      uploadacessinput: "false",
+      downloadacessinput: "false",
     };
   },
   created: function () 
@@ -55,6 +56,44 @@ export default {
     this.blockedstatusinput=changeitem.blockedstatus;
     this.uploadacessinput=changeitem.uploadaccess;
     this.downloadacessinput=changeitem.downloadaccess;
+    this.userid=changeitem.id;
+  },
+  methods:{
+    save()
+    {
+      this.$http2.post(this.Common.baseurl+"/admin/users/"+this.userid, 
+      {
+        "total_storage": this.totalstorageinput,
+        "blocked_status": this.stringtobool(this.blockedstatusinput),
+        "upload_access": this.stringtobool(this.uploadacessinput),
+        "download_access": this.stringtobool(this.downloadacessinput)
+      }
+      , 
+      {
+        headers: {'x-auth-token': this.Common.xtoken}
+      })
+      .then(response => {
+          if (response.status == 200) {
+            this.$notify({title: 'Notification',message: 'Change user information success!',duration: 3000});
+            this.$router.push({name:"Usermanagement"});
+          }
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        this.$router.push({name:"Usermanagement"});
+      });
+    },
+    stringtobool(st)
+    {
+      if(st == "true")
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
   }
 }
 </script>

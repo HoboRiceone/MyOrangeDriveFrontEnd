@@ -18,7 +18,7 @@
     <div style="height:5%;"></div>
     <div class="inputblock">
       AWS Secret Access Key: 
-      <el-input v-model="awssecretaccesskeyinput" class="inputbox" show-password></el-input>
+      <el-input v-model="awssecretaccesskeyinput" class="inputbox"></el-input>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -43,52 +43,42 @@ export default {
   data ()
   {
     return{
-      nameinput: '',
-      typeinput: '',
-      awsaccesskeyidinput: '',
-      awssecretaccesskeyinput: '',
-      awsregioninput: '',
-      awsbucketnameinput: '',
+      nameinput: "",
+      typeinput: "",
+      awsaccesskeyidinput: "",
+      awssecretaccesskeyinput: "",
+      awsregioninput: "",
+      awsbucketnameinput: "",
     };
   },
   methods:
   {
     add ()
     {
-      this.$api.post('/admin/config/storage', 
+      this.$http2.post(this.Common.baseurl+"/admin/config/storage", 
       {
-        'x-auth-token': this.Common.xtoken
-      }, 
-      {
-        'name': this.nameinput,
-        'type': this.typeinput,
-        'aws_access_key_id': this.awsaccesskeyidinput,
-        'aws_secret_access_key': this.awssecretaccesskeyinput,
-        'aws_region': this.awsregioninput,
-        'aws_bucket_name': this.awsbucketnameinput
-      },
-      response => {
-      if (response.status == 200) 
-      {
-        
-        alert("Add Success!");
-        
-      } 
-      else if(response.status == 400)
-      {
-        alert(response.data.msg);
-        
+        "name": this.nameinput,
+        "type": this.typeinput,
+        "aws_configuration" :{
+          "aws_access_key_id": this.awsaccesskeyidinput,
+          "aws_secret_access_key": this.awssecretaccesskeyinput,
+          "aws_region": this.awsregioninput,
+          "aws_bucket_name": this.awsbucketnameinput
+        }
       }
-      else if(response.status == 500)
+      , 
       {
-        alert(response.data.msg);
-        console.log(response.data.msg);
-        
-      }
-      else
-      {
-        alert("Network Error");
-      }
+        headers: {'x-auth-token': this.Common.xtoken}
+      })
+      .then(response => {
+          if (response.status == 200) {
+            this.$notify({title: 'Notification',message: 'Add user success!',duration: 3000});
+            this.$router.push({name:"Storageconfigure"});
+          }
+      })
+      .catch(function (error) {
+        console.log(error.response)
+        this.$router.push({name:"Storageconfigure"});
       });
     }
   }

@@ -27,7 +27,7 @@
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      <el-button type="primary">Save</el-button>
+      <el-button type="primary" @click="save">Save</el-button>
     </div>
   </div>
 </template>
@@ -38,6 +38,7 @@ export default {
   data ()
   {
     return{
+      id: 0,
       birthdayinput: '',
       firstnameinput: '',
       lastnameinput: '',
@@ -49,13 +50,16 @@ export default {
   {
     this.$api.get('/api/profile', 
       {
-      }, response => {
+        'x-auth-token': this.Common.xtoken
+      },
+      {}, response => {
       if (response.status == 200) 
       {
-        this.birthdayinput=response.data.result_data.profile.birthday;
-        this.firstnameinput=response.data.result_data.profile.first_name;
-        this.lastnameinput=response.data.result_data.profile.last_name;
-        this.genderinput=response.data.result_data.profile.gender;
+        this.id=response.data.result_data.id;
+        this.birthdayinput=response.data.result_data.birthday;
+        this.firstnameinput=response.data.result_data.first_name;
+        this.lastnameinput=response.data.result_data.last_name;
+        this.genderinput=response.data.result_data.gender;
 
       } 
       else if(response.status == 400)
@@ -66,8 +70,35 @@ export default {
       else
       {
         alert("Network Error");
+        console.log(response);
       }
       });
+  },
+  methods:
+  {
+    save()
+    {
+      this.$http2.post(this.Common.baseurl+"/api/profile/", 
+      {
+        "birthday": this.birthdayinput,
+        "first_name": this.firstnameinput,
+        "last_name": this.lastnameinput,
+        "gender": this.genderinput,
+        "password": this.passwordinput
+      }
+      , 
+      {
+        headers: {'x-auth-token': this.Common.xtoken}
+      })
+      .then(response => {
+          if (response.status == 200) {
+            this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
+          }
+      })
+      .catch(function (error) {
+        console.log(error.response);
+      });
+    }
   }
 }
 </script>

@@ -7,8 +7,10 @@ import ElementUI from 'element-ui'
 import Api from './api/index.js';
 import VueBus from 'vue-bus'
 import Common from './Common'
-Vue.prototype.Common = Common;
+import axios from 'axios';
 
+Vue.prototype.Common = Common;
+Vue.prototype.$http2 =axios;
 Vue.prototype.$api = Api;
 
 Vue.use(ElementUI);

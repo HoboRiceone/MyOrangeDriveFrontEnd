@@ -38,7 +38,7 @@
       </el-table-column>
     </el-table>
     <div style="margin-top: 20px">
-      <el-button style="float:left;margin-left: 3%" @click="addconfig">Add a new config</el-button>
+      <el-button style="float:left;margin-left: 3%; display:none;" @click="addconfig">Add a new config</el-button>
       <el-button style="float:left;margin-right: 1%" @click="changeconfig">Change config</el-button>
       <el-popover
         ref="moreinfo"
@@ -80,38 +80,7 @@ export default {
   },
   mounted: function () 
   {
-    this.$api.get('/admin/config/storage', 
-    {
-      'x-auth-token': this.Common.xtoken
-    }, 
-    {
-
-    },
-    response => {
-    if (response.status == 200) 
-    {
-      
-      var storageconfiglist;
-
-      storageconfiglist = response.data.result_data;
-      for (var key in storageconfiglist)
-      {
-        this.tableData.push({id: storageconfiglist[key].id,name: storageconfiglist[key].name,type: storageconfiglist[key].type,createdtime: storageconfiglist[key].created_time,
-                            modifytime: storageconfiglist[key].modify_time,currentuse: storageconfiglist[key].current_use.toString()});
-      }
-      this.storageconfigurelist=storageconfiglist;
-      
-    } 
-    else if(response.status == 400)
-    {
-      alert(response.data.msg);
-      
-    }
-    else
-    {
-      alert("Network Error");
-    }
-    });
+    this.getlist();
   },
     methods:{
     handleCurrentChange(val) {
@@ -132,6 +101,10 @@ export default {
         else if(this.currentRow.type == "AZURE")
         {
           this.$router.push({name:"Azurechange",params: {changeitem: this.storageconfigurelist[this.currentRow.id-1]}});
+        }
+        else if(this.currentRow.type == "LOCAL")
+        {
+          this.$router.push({name:"Localchange",params: {changeitem: this.storageconfigurelist[this.currentRow.id-1]}});
         }
       }
     },
@@ -157,6 +130,15 @@ export default {
           this.moreinfoshow4="";
           this.visible=!this.visible;
         }
+        else if(this.currentRow.type == "LOCAL")
+        {
+          var c=this.storageconfigurelist[this.currentRow.id-1].local_configuration;
+          this.moreinfoshow1="Local Path: :  "+c.local_path;
+          this.moreinfoshow2="";
+          this.moreinfoshow3="";
+          this.moreinfoshow4="";
+          this.visible=!this.visible;
+        }
       }
     },
     deleteconfig ()
@@ -168,7 +150,30 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          this.$message({type: 'success',message: 'Success!'});
+          this.$api.delete('/admin/config/storage/'+this.currentRow.id, 
+          {
+            'x-auth-token': this.Common.xtoken
+          }, 
+          {
+          }, response => {
+          if (response.status == 200) 
+          {
+            this.$message({type: 'success',message: 'Success!'});
+            console.log(response);  
+            this.tableData= [];
+            this.getlist();
+          } 
+          else if(response.status == 400)
+          {
+            alert(response.data.msg);
+            
+          }
+          else
+          {
+            alert("Network Error");
+            console.log(response);
+          }
+          });
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -176,6 +181,41 @@ export default {
           });          
         });
       }
+    },
+    getlist ()
+    {
+      this.$api.get('/admin/config/storage', 
+      {
+        'x-auth-token': this.Common.xtoken
+      }, 
+      {
+
+      },
+      response => {
+      if (response.status == 200) 
+      {
+        
+        var storageconfiglist;
+
+        storageconfiglist = response.data.result_data;
+        for (var key in storageconfiglist)
+        {
+          this.tableData.push({id: storageconfiglist[key].id,name: storageconfiglist[key].name,type: storageconfiglist[key].type,createdtime: storageconfiglist[key].created_time,
+                              modifytime: storageconfiglist[key].modify_time,currentuse: storageconfiglist[key].current_use.toString()});
+        }
+        this.storageconfigurelist=storageconfiglist;
+        
+      } 
+      else if(response.status == 400)
+      {
+        alert(response.data.msg);
+        
+      }
+      else
+      {
+        alert("Network Error");
+      }
+      });
     }
   }
 }

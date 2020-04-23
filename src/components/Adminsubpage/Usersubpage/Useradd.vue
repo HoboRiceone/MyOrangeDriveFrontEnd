@@ -18,7 +18,7 @@
     <div style="height:5%;"></div>
     <div class="inputblock">
       E-mail: 
-      <el-input v-model="emailinput" class="inputbox" show-password></el-input>
+      <el-input v-model="emailinput" class="inputbox"></el-input>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -32,26 +32,56 @@
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      <el-button type="primary">Save</el-button>
+      <el-button type="primary" @click="add">Save</el-button>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Useradd',
   data ()
   {
     return{
-      birthdayinput: '',
-      firstnameinput: '',
-      lastnameinput: '',
-      genderinput: '',
-      emailinput: '',
-      totalstorageinput: '',
-      souridinput: ''
+      firstnameinput: "",
+      lastnameinput: "",
+      genderinput: "",
+      emailinput: "",
+      totalstorageinput: "",
+      souridinput: ""
     };
   },
+  methods:
+  {
+    add ()
+    {
+      this.$http2.put(this.Common.baseurl+"/admin/users", 
+      {
+        "first_name": this.firstnameinput,
+        "last_name": this.lastnameinput,
+        "gender": this.genderinput,
+        "email": this.emailinput,
+        "total_storage": this.totalstorageinput,
+        "source_id": this.souridinput
+      }
+      , 
+      {
+        headers: {'x-auth-token': this.Common.xtoken}
+      })
+      .then(response => {
+          if (response.status == 200) {
+            this.$notify({title: 'Notification',message: 'Add user success!',duration: 3000});
+            this.$router.push({name:"Usermanagement"});
+          }
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        this.$router.push({name:"Usermanagement"});
+      });
+      
+    }
+  }
 }
 </script>
 

@@ -17,7 +17,7 @@
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      <el-button type="primary">Save</el-button>
+      <el-button type="primary" @click="save">Save</el-button>
     </div>
   </div>
 </template>
@@ -39,6 +39,34 @@ export default {
     this.nameinput=changeitem.name;
     this.typeinput=changeitem.type;
     this.azuretoken=changeitem.azure_configuration.azure_token;
+  },
+  methods:
+  {
+    save ()
+    {
+      this.$http2.put(this.Common.baseurl+"/admin/config/storage", 
+      {
+        "name": this.nameinput,
+        "type": this.typeinput,
+        "azure_configuration" :{
+          "azure_token": this.azuretoken,
+        }
+      }
+      , 
+      {
+        headers: {'x-auth-token': this.Common.xtoken}
+      })
+      .then(response => {
+          if (response.status == 200) {
+            this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
+            this.$router.push({name:"Storageconfigure"});
+          }
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        this.$router.push({name:"Storageconfigure"});
+      });
+    }
   }
 }
 </script>

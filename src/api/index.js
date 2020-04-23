@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 let http = axios.create({
-  baseURL: 'https://www.fastmock.site/mock/69644aa3b3492c307c28e8f212610ff9/test',      //'https://www.fastmock.site/mock/69644aa3b3492c307c28e8f212610ff9/test','http://34.204.85.79:8081'
+  baseURL: 'http://34.204.85.79:8081',      //'https://www.fastmock.site/mock/69644aa3b3492c307c28e8f212610ff9/test','http://34.204.85.79:8081'
   withCredentials: true,
   // headers: {
   //   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
