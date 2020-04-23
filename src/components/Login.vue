@@ -28,8 +28,8 @@ export default {
   name: 'Login',
   data () {
     return{
-    username:'',
-    password:'',
+    username:'johnwick123@gmail.com',
+    password:'123123',
     logtype: 'User'
     }
   },

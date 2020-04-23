@@ -49,7 +49,7 @@ export default {
       } 
       else
       {
-        alert("Error");
+        alert("Error:"+response.data.msg);
         console.log(response);
       }
       });

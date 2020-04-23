@@ -112,6 +112,11 @@ export default {
         alert(response.data.msg);
         
       }
+      else if(response.status == 403)
+      {
+        alert(response.data.msg);
+        
+      }
       else
       {
         alert("Network Error");
@@ -123,11 +128,7 @@ export default {
     upload(res)
     {
       let file = res.file;  //注意：直接上传file文件，不要用FormData对象的形式传
-      let config = {
-          headers: {
-              'Content-Type': 'multipart/form-data'
-          }
-      };
+
       this.generatorFileMd5(file);
 
       //从接口获取presigned url
@@ -173,54 +174,65 @@ export default {
               }, response => {
               if (response.status == 200) 
               {
-                var uploadurl;
-                var uploadkey;
-                uploadurl=response.data.result_data.upload_url;
-                uploadkey=response.data.result_data.upload_key;
-                let config = {headers: {'Content-Type': 'multipart/form-data'}};
+                if(response.data.result_data.upload_url != null)
+                {
+                  console.log(response);
+                  var uploadurl;
+                  var uploadkey;
+                  uploadurl=response.data.result_data.upload_url;
+                  uploadkey=response.data.result_data.upload_key;
+                  let config = {headers: {'Content-Type': 'multipart/form-data'}};
 
-                  //从接口获取presigned url
-                          //需要用put方法上传，post会报405，aws官方规定是put方法
-                  axios.put(uploadurl, file, config)
-                  .then(res1 => {
-                      if (res1.status == 200) {
-                        console.log(file.name);
-                        console.log(file.size);
-                        console.log(md5code);
-                        console.log(_this.current_dir_id);
-                        console.log(uploadkey);
-                        var jsondata=JSON.stringify({
-                          "file_name": file.name,
-                          "size": file.size,
-                          "md5": md5code,
-                          "dir_id": _this.current_dir_id,
-                          "upload_key": uploadkey
-                        });
-                        console.log(jsondata);
-                        _this.$http2.post(_this.Common.baseurl+"/api/upload", 
-                        jsondata, 
-                        {
-                          headers: {'x-auth-token': _this.Common.xtoken, 'Content-Type': 'application/json'}
-                        })
-                        .then(response => {
-                            if (response.status == 200) {
-                              _this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
-                              var nextdir={dirID: _this.current_dir_id}
-                              _this.flushDir(nextdir);
-                            }
-                        })
-                        .catch(function (error) {
-                          console.log(error.response);
-                        });
-                      }
-                  });
+                    //从接口获取presigned url
+                            //需要用put方法上传，post会报405，aws官方规定是put方法
+                    axios.put(uploadurl, file, config)
+                    .then(res1 => {
+                        if (res1.status == 200) {
+                          console.log(file.name);
+                          console.log(file.size);
+                          console.log(md5code);
+                          console.log(_this.current_dir_id);
+                          console.log(uploadkey);
+                          var jsondata=JSON.stringify({
+                            "file_name": file.name,
+                            "size": file.size,
+                            "md5": md5code,
+                            "dir_id": _this.current_dir_id,
+                            "upload_key": uploadkey
+                          });
+                          console.log(jsondata);
+                          _this.$http2.post(_this.Common.baseurl+"/api/upload", 
+                          jsondata, 
+                          {
+                            headers: {'x-auth-token': _this.Common.xtoken, 'Content-Type': 'application/json'}
+                          })
+                          .then(response => {
+                              if (response.status == 200) {
+                                _this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
+                                var nextdir={dirID: _this.current_dir_id}
+                                _this.flushDir(nextdir);
+                              }
+                          })
+                          .catch(function (error) {
+                            console.log(error.response);
+                          });
+                        }
+                    });
+                }
+                else
+                {
+                  _this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
+                  var nextdir={dirID: _this.current_dir_id}
+                  _this.flushDir(nextdir);
+                }
               } 
               else
               {
-                alert("Error");
+                alert("Error:"+response.data.msg);
                 console.log(response);
               }
               });
+
           }
       };
 
