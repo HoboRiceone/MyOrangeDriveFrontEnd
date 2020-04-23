@@ -21,6 +21,10 @@
                 <i class="el-icon-setting" style="font-size:100%"></i>
                 System Settings
               </el-menu-item>
+              <el-menu-item  style="font-size:35%;position: absolute;bottom:3%;width:100%;" @click="exit">
+                <i class="el-icon-switch-button" style="font-size:100%"></i>
+                Logout
+              </el-menu-item>
             </el-menu>
         </el-aside>
         <el-main style="background-color:#DCDFE6;margin: 0px;padding: 0px;">
@@ -44,6 +48,35 @@ export default {
   },
   methods:
   {
+    exit()
+    {
+      this.$confirm('Are you sure to exit?', 'Exit', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          this.$api.post('/admin/logout', {'x-auth-token': this.Common.xtoken},
+          {
+
+          }, response => {
+          if (response.status == 200) 
+          {
+            this.Common.xtoken='null';
+            this.$router.push({name:"Login"});
+          } 
+          else if(response.status == 400)
+          {
+            alert(response.data.msg);
+            
+          }
+          else
+          {
+            alert("Network Error");
+          }
+          });
+
+        })
+    }
   }
 }
 </script>
