@@ -46,7 +46,7 @@ export default {
         if (response.status == 200) 
         {
           this.Common.xtoken=response.headers['x-auth-token'];
-          console.log(this.Common.xtoken);
+
           this.$router.push({name:"MainFrame"})
         } 
         else if(response.status == 400)
@@ -70,7 +70,7 @@ export default {
         if (response.status == 200) 
         {
           this.Common.xtoken=response.headers['x-auth-token'];
-          console.log(this.Common.xtoken);
+
           this.$router.push({name:"AdminMainFrame"});
         } 
         else if(response.status == 400)

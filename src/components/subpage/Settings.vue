@@ -2,8 +2,12 @@
   <div class="settings">
     <div style="height:5%;"></div>
     <div class="inputblock">
-      Birthday: 
-      <el-input v-model="birthdayinput" class="inputbox"></el-input>
+      Birthday: <br/>
+      <el-date-picker
+        v-model="datevalue"
+        type="date"
+        placeholder="Choose a date">
+      </el-date-picker>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -17,8 +21,15 @@
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      Gender: 
-      <el-input v-model="genderinput" class="inputbox"></el-input>
+      Gender: <br/>
+      <el-select v-model="genderinput" placeholder="choose">
+        <el-option
+          v-for="item in genderlist"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -39,11 +50,19 @@ export default {
   {
     return{
       id: 0,
-      birthdayinput: '',
-      firstnameinput: '',
-      lastnameinput: '',
-      genderinput: '',
-      passwordinput: ''
+      birthdayinput: "",
+      firstnameinput: "",
+      lastnameinput: "",
+      passwordinput: "",
+      genderlist: [{
+          value: "M",
+          label: "gentleman"
+        }, {
+          value: "F",
+          label: "lady"
+        }],
+      genderinput: "",
+      datevalue: ""
     };
   },
   created: function () 
@@ -56,7 +75,8 @@ export default {
       if (response.status == 200) 
       {
         this.id=response.data.result_data.id;
-        this.birthdayinput=response.data.result_data.birthday;
+        this.datevalue=new Date(response.data.result_data.birthday);
+        this.datevalue.setDate(this.datevalue.getDate()+1);
         this.firstnameinput=response.data.result_data.first_name;
         this.lastnameinput=response.data.result_data.last_name;
         this.genderinput=response.data.result_data.gender;
@@ -78,6 +98,7 @@ export default {
   {
     save()
     {
+      this.dateparse();
       this.$http2.post(this.Common.baseurl+"/api/profile/", 
       {
         "birthday": this.birthdayinput,
@@ -98,6 +119,22 @@ export default {
       .catch(function (error) {
         console.log(error.response);
       });
+    },
+    dateparse()
+    {
+      var y,m,d;
+      y=this.datevalue.getFullYear();
+      m=this.datevalue.getMonth()+1;
+      if(m < 10)
+      {
+        m="0"+m;
+      }
+      d=this.datevalue.getDate();
+      if(d<10)
+      {
+        d="0"+d;
+      }
+      this.birthdayinput=y+"-"+m+"-"+d;
     }
   }
 }

@@ -13,6 +13,10 @@
                 <i class="el-icon-menu" style="font-size:100%"></i>
                 File Management
               </el-menu-item>
+              <el-menu-item index="/Fileshare" style="font-size:35%;">
+                <i class="el-icon-link" style="font-size:100%"></i>
+                Share Management
+              </el-menu-item>
               <el-menu-item index="/Settings" style="font-size:35%;">
                 <i class="el-icon-setting" style="font-size:100%"></i>
                 Settings

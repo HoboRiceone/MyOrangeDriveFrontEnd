@@ -6,6 +6,7 @@ import MainFrame from '../components/MainFrame.vue'
 import AdminMainFrame from '../components/AdminMainFrame.vue'
 import Filemanagement from '../components/subpage/Filemanagement.vue'
 import Settings from '../components/subpage/Settings.vue'
+import Fileshare from '../components/subpage/Fileshare.vue'
 import SystemSettings from '../components/Adminsubpage/SystemSettings.vue'
 import Usermanagement from '../components/Adminsubpage/Usermanagement.vue'
 import Useradd from '../components/Adminsubpage/Usersubpage/Useradd.vue'
@@ -43,7 +44,12 @@ const routes = [
         path: '/Settings',
         name: 'Settings',
         component: Settings
-      }
+      },
+      {
+        path: '/Fileshare',
+        name: 'Fileshare',
+        component: Fileshare
+      },
     ]
   },
   {

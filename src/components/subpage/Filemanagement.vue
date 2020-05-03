@@ -21,9 +21,10 @@
           <el-button slot="reference" class="toolcompent" type="primary" plain>New Folder</el-button>
         </el-popover>
       </el-header>
+      <el-progress :style="uploadpercentageshow" :percentage="uploadpercentage"></el-progress>
       <div style="margin-left:1%;">
         <p class="dirback" style="float:left;font-size:1em;color:#409EFF;" type="text" @click="backpredir">Back </p>
-         <p style="float: left;font-size:1em;margin-left:0.5%;"> | {{current_dir_name}}</p>
+        <p style="float: left;font-size:1em;margin-left:0.5%;"> | {{current_dir_name}}</p>
       </div>  
       <div class="typemenu">
         <p style="text-align: left;margin:0;margin-left:2.3%;width:30%;float:left;">file name</p>
@@ -61,6 +62,8 @@ export default {
       pre_dir_id: 0,
       newfoldershow: false,
       newfoldername:"",
+      uploadpercentage:0,
+      uploadpercentageshow: "display:none",
     };
   },
   components:
@@ -129,6 +132,7 @@ export default {
     {
       let file = res.file;  //注意：直接上传file文件，不要用FormData对象的形式传
 
+      this.uploadpercentageshow="display:inline";
       this.generatorFileMd5(file);
 
       //从接口获取presigned url
@@ -162,6 +166,7 @@ export default {
           } else {
               // console.info('computed hash', spark.end())  // spark.end(): 文件 MD5值生成完成
               var md5code=spark.end();
+              _this.uploadpercentage=10;
               _this.$api.get('/api/upload',
               {
                 'x-auth-token': _this.Common.xtoken
@@ -176,23 +181,20 @@ export default {
               {
                 if(response.data.result_data.upload_url != null)
                 {
-                  console.log(response);
                   var uploadurl;
                   var uploadkey;
                   uploadurl=response.data.result_data.upload_url;
                   uploadkey=response.data.result_data.upload_key;
-                  let config = {headers: {'Content-Type': 'multipart/form-data'}};
+                  let config = {headers: {'Content-Type': 'multipart/form-data'},
+                                 onUploadProgress: progressEvent => {
+                                  _this.uploadpercentage = parseInt((progressEvent.loaded / progressEvent.total * 90)+10);
+                                }};
 
                     //从接口获取presigned url
                             //需要用put方法上传，post会报405，aws官方规定是put方法
                     axios.put(uploadurl, file, config)
                     .then(res1 => {
                         if (res1.status == 200) {
-                          console.log(file.name);
-                          console.log(file.size);
-                          console.log(md5code);
-                          console.log(_this.current_dir_id);
-                          console.log(uploadkey);
                           var jsondata=JSON.stringify({
                             "file_name": file.name,
                             "size": file.size,
@@ -200,7 +202,6 @@ export default {
                             "dir_id": _this.current_dir_id,
                             "upload_key": uploadkey
                           });
-                          console.log(jsondata);
                           _this.$http2.post(_this.Common.baseurl+"/api/upload", 
                           jsondata, 
                           {
@@ -211,6 +212,7 @@ export default {
                                 _this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
                                 var nextdir={dirID: _this.current_dir_id}
                                 _this.flushDir(nextdir);
+                                _this.uploadpercentageshow="display:none";
                               }
                           })
                           .catch(function (error) {
@@ -224,6 +226,8 @@ export default {
                   _this.$notify({title: 'Notification',message: 'Success!',duration: 3000});
                   var nextdir={dirID: _this.current_dir_id}
                   _this.flushDir(nextdir);
+                  _this.uploadpercentage=100;
+                  _this.uploadpercentageshow="display:none";
                 }
               } 
               else
@@ -285,7 +289,7 @@ export default {
   },
   mounted: function () 
   {
-    this.$refs.setheight.style.height = ((this.$refs.getheight.offsetHeight)*0.84)+'px';
+    this.$refs.setheight.style.height = ((this.$refs.getheight.offsetHeight)*0.80)+'px';
     this.$api.get('/api/dirs', 
     {
       'x-auth-token': this.Common.xtoken
