@@ -8,7 +8,7 @@
     <div style="height:5%;"></div>
     <div class="inputblock">
       Type: 
-      <el-input v-model="typeinput" class="inputbox"></el-input>
+      <el-input v-model="typeinput" class="inputbox" :disabled="true"></el-input>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">

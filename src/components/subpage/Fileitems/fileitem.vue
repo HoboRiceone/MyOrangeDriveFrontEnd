@@ -96,7 +96,6 @@ export default {
     },
     download()
     {
-      console.log(this.fileid);
       this.$api.get('/api/d/'+this.fileid,
       {
         'x-auth-token': this.Common.xtoken

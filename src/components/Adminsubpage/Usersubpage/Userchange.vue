@@ -3,7 +3,15 @@
     <div style="height:5%;"></div>
     <div class="inputblock">
       Total Storage: 
-      <el-input v-model="totalstorageinput" class="inputbox"></el-input>
+    </div>
+    <div class="inputblock">
+      <el-input v-model="totalstorageinput" style="width:85%;">
+      </el-input>
+      <el-select v-model="unitselect" style="width:15%;">
+        <el-option label="KB" value="1024"></el-option>
+        <el-option label="MB" value="1048576"></el-option>
+        <el-option label="GB" value="1073741824"></el-option>
+      </el-select>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -47,12 +55,32 @@ export default {
       blockedstatusinput: "false",
       uploadacessinput: "false",
       downloadacessinput: "false",
+      unitselect: "1048576"
     };
   },
   created: function () 
   {
     var changeitem=this.$route.params.changeitem;
-    this.totalstorageinput=changeitem.totalstorage;
+    var storageinit=parseInt(changeitem.totalstorage);
+    if(storageinit >= 1073741824)
+    {
+      this.totalstorageinput=(storageinit/1073741824).toString();
+      this.unitselect="1073741824";
+    }
+    else if(storageinit >= 1048576)
+    {
+      this.totalstorageinput=(storageinit/1048576).toString();
+      this.unitselect="1048576";
+    }
+    else if(storageinit >= 1024)
+    {
+      this.totalstorageinput=(storageinit/1024).toString();
+      this.unitselect="1024";
+    }
+    else
+    {
+      this.totalstorageinput="0";
+    }
     this.blockedstatusinput=changeitem.blockedstatus;
     this.uploadacessinput=changeitem.uploadaccess;
     this.downloadacessinput=changeitem.downloadaccess;
@@ -61,9 +89,10 @@ export default {
   methods:{
     save()
     {
+      var finalstorage=parseInt(this.totalstorageinput) * parseInt(this.unitselect);
       this.$http2.post(this.Common.baseurl+"/admin/users/"+this.userid, 
       {
-        "total_storage": this.totalstorageinput,
+        "total_storage": finalstorage.toString(),
         "blocked_status": this.stringtobool(this.blockedstatusinput),
         "upload_access": this.stringtobool(this.uploadacessinput),
         "download_access": this.stringtobool(this.downloadacessinput)

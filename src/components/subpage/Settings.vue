@@ -75,8 +75,15 @@ export default {
       if (response.status == 200) 
       {
         this.id=response.data.result_data.id;
-        this.datevalue=new Date(response.data.result_data.birthday);
-        this.datevalue.setDate(this.datevalue.getDate()+1);
+        if(response.data.result_data.birthday == "")
+        {
+          this.datevalue=this.datevalue=new Date("2000-01-02");
+        }
+        else
+        {
+          this.datevalue=new Date(response.data.result_data.birthday);
+          this.datevalue.setDate(this.datevalue.getDate()+1);
+        }
         this.firstnameinput=response.data.result_data.first_name;
         this.lastnameinput=response.data.result_data.last_name;
         this.genderinput=response.data.result_data.gender;

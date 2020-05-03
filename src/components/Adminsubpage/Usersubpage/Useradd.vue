@@ -12,8 +12,11 @@
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      Gender: 
-      <el-input v-model="genderinput" class="inputbox"></el-input>
+      Gender: <br/>
+      <el-select v-model="genderinput">
+        <el-option label="gentleman" value="F"></el-option>
+        <el-option label="lady" value="M"></el-option>
+      </el-select>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -23,12 +26,24 @@
     <div style="height:5%;"></div>
     <div class="inputblock">
       Total Storage: 
-      <el-input v-model="totalstorageinput" class="inputbox"></el-input>
+    </div>
+    <div class="inputblock">
+      <el-input v-model="totalstorageinput" style="width:85%;">
+      </el-input>
+      <el-select v-model="unitselect" style="width:15%;">
+        <el-option label="KB" value="1024"></el-option>
+        <el-option label="MB" value="1048576"></el-option>
+        <el-option label="GB" value="1073741824"></el-option>
+      </el-select>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
-      Source ID: 
-      <el-input v-model="souridinput" class="inputbox"></el-input>
+      Storage Source: <br/>
+      <el-select v-model="souridinput">
+        <el-option label="AWS" value="1"></el-option>
+        <el-option label="Azure" value="2"></el-option>
+        <el-option label="Local" value="3"></el-option>
+      </el-select>
     </div>
     <div style="height:5%;"></div>
     <div class="inputblock">
@@ -49,20 +64,22 @@ export default {
       genderinput: "",
       emailinput: "",
       totalstorageinput: "",
-      souridinput: ""
+      souridinput: "",
+      unitselect: "1048576"
     };
   },
   methods:
   {
     add ()
     {
+      var finalstorage=parseInt(this.totalstorageinput) * parseInt(this.unitselect);
       this.$http2.put(this.Common.baseurl+"/admin/users", 
       {
         "first_name": this.firstnameinput,
         "last_name": this.lastnameinput,
         "gender": this.genderinput,
         "email": this.emailinput,
-        "total_storage": this.totalstorageinput,
+        "total_storage": finalstorage.toString(),
         "source_id": this.souridinput
       }
       , 
@@ -97,6 +114,11 @@ export default {
   margin-left:3%;
   text-align:left;
   width:30%;
+}
+.inputblock1
+{
+  margin-left:3%;
+  text-align:left;
 }
 .inputbox
 {

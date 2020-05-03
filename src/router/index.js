@@ -12,7 +12,6 @@ import Usermanagement from '../components/Adminsubpage/Usermanagement.vue'
 import Useradd from '../components/Adminsubpage/Usersubpage/Useradd.vue'
 import Userchange from '../components/Adminsubpage/Usersubpage/Userchange.vue'
 import Storageconfigure from '../components/Adminsubpage/Storageconfigure.vue'
-import AWSadd from '../components/Adminsubpage/Configsubpage/AWSadd.vue'
 import AWSchange from '../components/Adminsubpage/Configsubpage/AWSchange.vue'
 import Azurechange from '../components/Adminsubpage/Configsubpage/Azurechange.vue'
 import Localchange from '../components/Adminsubpage/Configsubpage/Localchange.vue'
@@ -81,11 +80,6 @@ const routes = [
         path: '/Storageconfigure',
         name: 'Storageconfigure',
         component: Storageconfigure
-      },
-      {
-        path: '/AWSadd',
-        name: 'AWSadd',
-        component: AWSadd
       },
       {
         path: '/AWSchange',

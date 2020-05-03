@@ -217,8 +217,13 @@ export default {
                           })
                           .catch(function (error) {
                             console.log(error.response);
+                            _this.uploadpercentageshow="display:none";
                           });
                         }
+                    })
+                    .catch(function (error) {
+                      console.log(error.response);
+                      _this.uploadpercentageshow="display:none";
                     });
                 }
                 else
@@ -234,6 +239,7 @@ export default {
               {
                 alert("Error:"+response.data.msg);
                 console.log(response);
+                _this.uploadpercentageshow="display:none";
               }
               });
 
